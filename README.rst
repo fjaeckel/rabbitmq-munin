@@ -64,6 +64,15 @@ file (on debian that is ``/etc/munin/plugin-conf.d``)::
     [rabbitmq-queue_memory]
     env.vhost vhostname
 
+Setting a different RabbitMQctl path
+====================================
+
+You can set the path of the rabbitmqctl binary by changing the plug-in
+configuration file (on debian that is ``/etc/munin/plugin-conf.d``)::
+
+    [rabbitmq-*]
+    env.rabbitmqctl /usr/local/sbin/rabbitmqctl
+
 Author
 ======
 

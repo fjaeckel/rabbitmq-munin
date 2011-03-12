@@ -25,11 +25,18 @@ if [ "$1" = "autoconf" ]; then
 	exit 0
 fi
 
+# rabbitmqctl binary path can be set via env.rabbitmqctl in the plugin-conf.d
+# directory
+RABBITMQCTL=${rabbitmqctl:-rabbitmqctl}
+
+# erlexec complains in newer versions about not finding HOME if it's not set
+export HOME=${HOME:-"/var/lib/rabbitmq/"}
+
 # If run with the "config"-parameter, give out information on how the
 # graphs should look. 
 
 VHOST=${vhost:-"/"}
-QUEUES=$(rabbitmqctl list_queues -p $VHOST name | \
+QUEUES=$($RABBITMQCTL list_queues -p $VHOST name | \
 		grep -v '^Listing' | \
 		grep -v 'done\.$' | sed -e 's/[.-=]/_/g' )
  
@@ -69,6 +76,6 @@ fi
 # real work - i.e. display the data. Almost always this will be
 # "value" subfield for every data field.
 
-rabbitmqctl list_queues -p $VHOST | \
+$RABBITMQCTL list_queues -p $VHOST | \
 	grep -v "^Listing" | grep -v "done.$" | \
 	perl -nle'($q, $s) = split; $q =~ s/[.-=]/_/g; print("$q.value $s")'
